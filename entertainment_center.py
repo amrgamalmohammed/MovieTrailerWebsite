@@ -3,7 +3,7 @@ import fresh_tomatoes as ft
 import tmdbsimple as tmdb
 
 # TMDB API registered key
-api_key = ""
+api_key = "0faa645fefa10d2dc0880b20e8ecd232"
 
 class EntertainmentCenter(object):
     """
@@ -23,7 +23,7 @@ class EntertainmentCenter(object):
         movies_file = None
 
         if self.file_path is None:
-            movies_file = "/defaults.txt"
+            movies_file = "defaults.txt"
         else:
             movies_file = self.file_path
 
@@ -34,7 +34,10 @@ class EntertainmentCenter(object):
 
         # Loop over all titles
         for title in f:
-            response = search.movie(query=title)['results'][0]      # Record the first response
+            response = search.movie(query=title)['results']
+            if len(response) == 0:
+                continue
+            response = response[0]      # Record the first response
             movie_id = response['id']
             tmdb_movie = tmdb.Movies(movie_id).info(**{'append_to_response': 'trailers'})
 
