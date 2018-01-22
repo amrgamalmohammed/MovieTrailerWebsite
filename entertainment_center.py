@@ -3,7 +3,7 @@ import fresh_tomatoes as ft
 import tmdbsimple as tmdb
 
 # TMDB API registered key
-api_key = "0faa645fefa10d2dc0880b20e8ecd232"
+api_key = ""
 
 class EntertainmentCenter(object):
     """
