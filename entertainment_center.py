@@ -10,8 +10,9 @@ api_key = "0faa645fefa10d2dc0880b20e8ecd232"
 class EntertainmentCenter(object):
     """
     This class creates a list of movies that are generated in an HTML file
-    You can generate your own movies by providing a path to text file containing titles that you want
-    us to view, or you can just simply view our picks!
+    You can generate your own movies by providing a path to text file
+    containing titles that you want us to view, or you can just simply
+    view our picks!
     """
 
     def __init__(self, file_path=None):
@@ -19,7 +20,8 @@ class EntertainmentCenter(object):
 
     def generate_movies_page(self):
         """
-        Try to get info of your favourite movies or just display pre loaded movies
+        Try to get info of your favourite movies or just display
+        pre loaded movies
         """
         movies = []  # List to hold all the movies
         movies_file = None
@@ -41,16 +43,23 @@ class EntertainmentCenter(object):
                 continue
             response = response[0]  # Record the first response
             movie_id = response['id']
-            tmdb_movie = tmdb.Movies(movie_id).info(**{'append_to_response': 'trailers'})
+            tmdb_movie = tmdb.Movies(movie_id) \
+                .info(**{'append_to_response': 'trailers'})
 
             # Construct needed information about movies
             movie_title = tmdb_movie.get('original_title')
-            movie_poster = "https://image.tmdb.org/t/p/original" + tmdb_movie.get('poster_path')
-            movie_trailer = "http://www.youtube.com/watch?v=" + tmdb_movie.get('trailers')['youtube'][0]['source']
-            print(movie_id, " ", movie_title, " ", movie_poster, " ", movie_trailer)
+            movie_poster = \
+                "https://image.tmdb.org/t/p/original" \
+                + tmdb_movie.get('poster_path')
+            movie_trailer = \
+                "http://www.youtube.com/watch?v=" \
+                + tmdb_movie.get('trailers')['youtube'][0]['source']
+            print(movie_id, " ", movie_title, " ",
+                  movie_poster, " ", movie_trailer)
 
             # Construct movie object and append it to our list
-            movie = self.__construct_movie_object(movie_title, movie_poster, movie_trailer)
+            movie = self.__construct_movie_object(movie_title,
+                                                  movie_poster, movie_trailer)
             movies.append(movie)
 
         # Attempt to generate final HTML file
@@ -59,19 +68,26 @@ class EntertainmentCenter(object):
     @staticmethod
     def __construct_movie_object(title, poster, trailer):
         """
-        Private function to handle the creation of a movie class object from media file
+        Private function to handle the creation of a movie
+        class object from media file
         """
         movie = media.Movie(title, poster, trailer)
         return movie
 
 
 def main(argv):
+    """
+    Check for command line arguments to handle both
+    running modes
+    """
     path = None
     if len(argv) > 1:
-        path = str(argv[1])
+        path = str(argv[1])  # Use first argument as file path
+    # Create Entertainment center class and generate HTML file
     center = EntertainmentCenter(path)
     center.generate_movies_page()
 
 
+# Handle main call
 if __name__ == "__main__":
     main(sys.argv)
