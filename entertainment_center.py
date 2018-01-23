@@ -1,9 +1,11 @@
+import sys
 import media
 import fresh_tomatoes as ft
 import tmdbsimple as tmdb
 
 # TMDB API registered key
-api_key = ""
+api_key = "0faa645fefa10d2dc0880b20e8ecd232"
+
 
 class EntertainmentCenter(object):
     """
@@ -27,7 +29,7 @@ class EntertainmentCenter(object):
         else:
             movies_file = self.file_path
 
-        f = open(movies_file, "r")      # Read movies' titles
+        f = open(movies_file, "r")  # Read movies' titles
 
         tmdb.API_KEY = api_key
         search = tmdb.Search()
@@ -37,7 +39,7 @@ class EntertainmentCenter(object):
             response = search.movie(query=title)['results']
             if len(response) == 0:
                 continue
-            response = response[0]      # Record the first response
+            response = response[0]  # Record the first response
             movie_id = response['id']
             tmdb_movie = tmdb.Movies(movie_id).info(**{'append_to_response': 'trailers'})
 
@@ -61,3 +63,15 @@ class EntertainmentCenter(object):
         """
         movie = media.Movie(title, poster, trailer)
         return movie
+
+
+def main(argv):
+    path = None
+    if len(argv) > 1:
+        path = str(argv[1])
+    center = EntertainmentCenter(path)
+    center.generate_movies_page()
+
+
+if __name__ == "__main__":
+    main(sys.argv)
